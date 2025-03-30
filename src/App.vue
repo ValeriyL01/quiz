@@ -2,9 +2,14 @@
 import StartScreen from './components/StartScreen.vue'
 import Quiz from './components/Quiz.vue'
 import Loader from './components/Loader.vue'
+import Result from './components/Result.vue'
 import { ref } from 'vue'
 const questions = ref('')
 const status = ref('start')
+const userAnswers = ref([])
+const storeAnswer = (answer) => {
+  userAnswers.value.push(answer)
+}
 async function fetchQuizQuestions(topic) {
   const apiKey = import.meta.env.VITE_API_KEY
   const url = new URL('https://quizapi.io/api/v1/questions')
@@ -22,12 +27,19 @@ async function fetchQuizQuestions(topic) {
 
     const data = await response.json()
     questions.value = data
+    console.log(questions.value)
     status.value = 'ready'
     return data
   } catch (error) {
     console.error('Ошибка при получении вопросов:', error.message)
     throw error
   }
+}
+
+const restartQuiz = () => {
+  questions.value = ''
+  status.value = 'start'
+  userAnswers.value = []
 }
 </script>
 
@@ -39,8 +51,18 @@ async function fetchQuizQuestions(topic) {
       </div>
     </header>
     <StartScreen v-if="status === 'start'" @start-quiz="fetchQuizQuestions"></StartScreen>
-    <Quiz :questions="questions" v-if="status === 'ready'"></Quiz>
+    <Quiz
+      @end-quiz="status = 'finished'"
+      @store-answer="storeAnswer"
+      :questions="questions"
+      v-if="status === 'ready'"
+    ></Quiz>
     <Loader v-if="status === 'loading'"></Loader>
+    <Result
+      v-if="status === 'finished'"
+      :userAnswers="userAnswers"
+      @restart-quiz="restartQuiz"
+    ></Result>
   </div>
 </template>
 
