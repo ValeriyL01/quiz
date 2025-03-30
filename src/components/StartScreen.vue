@@ -2,14 +2,42 @@
 import { ref } from 'vue'
 const emit = defineEmits(['start-quiz'])
 const topic = ref('')
+const topics = [
+  'Linux',
+  'BASH',
+  'Docker',
+  'HTML',
+  'Postgres',
+  'Laravel',
+  'React',
+  'Django',
+  'cPanel',
+  'nodeJS',
+  'WordPress',
+  'Next.js',
+  'VueJS',
+  'Apache Kafka',
+]
 </script>
 
 <template>
   <section class="start-screen container">
-    <h2>Выберете тему для начала теста...</h2>
-    <input v-model="topic" type="text" placeholder="Введите тему" />
-    <button @click="emit('start-quiz', topic)" :disabled="!topic">Начать тест</button>
+    <h2>Select a topic to start the test...</h2>
+    <div>
+      <button
+        class="topicButton"
+        @click="emit('start-quiz', topic)"
+        v-for="(top, index) in topics"
+        :key="index"
+      >
+        {{ top }}
+      </button>
+    </div>
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+.topicButton {
+  max-width: 200px;
+}
+</style>

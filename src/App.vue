@@ -27,7 +27,6 @@ async function fetchQuizQuestions(topic) {
 
     const data = await response.json()
     questions.value = data
-    console.log(questions.value)
     status.value = 'ready'
     return data
   } catch (error) {
@@ -47,7 +46,7 @@ const restartQuiz = () => {
   <div id="app">
     <header>
       <div class="container">
-        <h1>Quiz Generator</h1>
+        <h1>Quiz for programmers</h1>
       </div>
     </header>
     <StartScreen v-if="status === 'start'" @start-quiz="fetchQuizQuestions"></StartScreen>

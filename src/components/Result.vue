@@ -30,4 +30,26 @@ const correctAnswersCount = computed(() => {
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+.result-screen {
+  ul {
+    li {
+      border: 1px solid var(--light-color);
+      margin: 20px auto;
+      padding: 12px;
+      max-width: 480px;
+      border-width: 2px;
+      b {
+        display: block;
+        margin-bottom: 12px;
+      }
+      &.correct {
+        border-color: var(--corect-color);
+      }
+      &.incorrect {
+        border-color: var(--incorrect-color);
+      }
+    }
+  }
+}
+</style>

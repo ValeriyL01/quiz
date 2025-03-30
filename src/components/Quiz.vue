@@ -42,7 +42,7 @@ const optionsFilter = computed(() => {
       <p>Question {{ currentQuestion + 1 }} of {{ props.questions.length }}</p>
     </div>
     <progress max="100" :value="((currentQuestion + 1) / props.questions.length) * 100"></progress>
-    <h2>Quiz component</h2>
+
     <div class="question">
       <h3>{{ props.questions[currentQuestion].question }}</h3>
     </div>
@@ -61,4 +61,47 @@ const optionsFilter = computed(() => {
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+.quiz {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    h2 {
+      font-size: 28px;
+    }
+    p {
+      font-size: 18px;
+    }
+  }
+
+  .question {
+    padding-top: 40px;
+    h3 {
+      font-size: 40px;
+    }
+  }
+  .answers {
+    padding-top: 30px;
+  }
+}
+progress {
+  width: 100%;
+  height: 20px;
+  background-color: var(--light-color);
+  position: relative;
+  border: 1px solid var(--light-color);
+  border-radius: 10px;
+  overflow: hidden;
+  &::-webkit-progress-bar {
+    background-color: var(--light-color);
+  }
+  &::-webkit-progress-value {
+    background: var(--primary-gradient);
+  }
+  &::-moz-progress-bar {
+    background: var(--primary-gradient);
+  }
+}
+</style>
