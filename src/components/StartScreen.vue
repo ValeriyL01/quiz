@@ -1,23 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const emit = defineEmits(['start-quiz'])
-const topic = ref('')
-const topics = [
-  'Linux',
-  'BASH',
-  'Docker',
-  'HTML',
-  'Postgres',
-  'Laravel',
-  'React',
-  'Django',
-  'cPanel',
-  'nodeJS',
-  'WordPress',
-  'Next.js',
-  'VueJS',
-  'Apache Kafka',
-]
+const topics = ref([])
+
+async function fetchCategories() {
+  const apiKey = import.meta.env.VITE_API_KEY
+  const url = new URL('https://quizapi.io/api/v1/categories')
+
+  url.searchParams.append('apiKey', apiKey)
+
+  try {
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`)
+    }
+
+    const data = await response.json()
+    topics.value = data
+    return data
+  } catch (error) {
+    console.error('Ошибка при получении категорий:', error.message)
+    throw error
+  }
+}
+
+onMounted(() => {
+  fetchCategories()
+})
 </script>
 
 <template>
@@ -26,11 +36,11 @@ const topics = [
     <div>
       <button
         class="topicButton"
-        @click="emit('start-quiz', topic)"
-        v-for="(top, index) in topics"
+        @click="emit('start-quiz', topic.name)"
+        v-for="(topic, index) in topics"
         :key="index"
       >
-        {{ top }}
+        {{ topic.name }}
       </button>
     </div>
   </section>
