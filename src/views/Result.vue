@@ -1,22 +1,29 @@
 <script setup>
 import { computed } from 'vue'
-const props = defineProps(['userAnswers'])
-const emit = defineEmits(['restart-quiz'])
+import { useQuizStore } from '@/stores/quiz'
+import { useRouter } from 'vue-router'
+const quizStore = useQuizStore()
+const router = useRouter()
 const correctAnswersCount = computed(() => {
-  return props.userAnswers.filter((answer) => answer.userAnswer === answer.correctAnswer).length
+  return quizStore.userAnswers.filter((answer) => answer.userAnswer === answer.correctAnswer).length
 })
+
+const restart = () => {
+  quizStore.restartQuiz()
+  router.push('/')
+}
 </script>
 
 <template>
   <section class="result-screen container">
-    <h1 v-if="correctAnswersCount === props.userAnswers.length">Congratulations!&#127881;</h1>
+    <h1 v-if="correctAnswersCount === quizStore.userAnswers.length">Congratulations!&#127881;</h1>
     <h1>
-      You have answered {{ correctAnswersCount }} out of {{ userAnswers.length }} questions
-      correctly.
+      You have answered {{ correctAnswersCount }} out of
+      {{ quizStore.userAnswers.length }} questions correctly.
     </h1>
     <ul>
       <li
-        v-for="(answer, index) in props.userAnswers"
+        v-for="(answer, index) in quizStore.userAnswers"
         :key="index"
         :class="answer.userAnswer === answer.correctAnswer ? 'correct' : 'incorrect'"
       >
@@ -26,7 +33,7 @@ const correctAnswersCount = computed(() => {
         <p>Correct answer:{{ answer.correctAnswer }}</p>
       </li>
     </ul>
-    <button @click="emit('restart-quiz')">Create a New Quiz</button>
+    <button @click="restart">Create a New Quiz</button>
   </section>
 </template>
 
